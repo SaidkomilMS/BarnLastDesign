@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import (
 from dbworker import DBWorker
 from dialogs.ask_cc_dialog import ChildCountUi
 from dialogs.ask_new_product_info import UiProductInfo
+from dialogs.addingmeal import MealInfoUI
 from extrautils import *
 from modifiedclasses.changingwidgets import AddDecrementWidget, AddIncrementWidget
 from modifiedclasses.mysqlrelatioanltablemodel import SRTM
@@ -32,11 +33,13 @@ def generate_image(text):
 
     font = ImageFont.truetype("resources/ds-digit.ttf", size=212)
     wt, ht = draw.textsize(text, font)
-    draw.text(((w - wt) / 2, (h - ht) / 2), text, font=font, fill='#247ac6')
+    draw.text(((w - wt) / 2, (h - ht - ht) / 2), text, font=font, fill='#247ac6')
+    """
     font = ImageFont.truetype("resources/ubuntu.ttf", size=55)
     text = "Время в ташкенте:"
     wt, ht = draw.textsize(text, font)
     draw.text(((w - wt) / 2, int(0.5 * ht)), text, font=font, fill="#247ac6")
+    """
 
     image.save(r'images/spimage.jpg')
 
@@ -50,7 +53,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Амбарная книга")
         self.splash_for_time = QSplashScreen(QtGui.QPixmap(r'images/spimage.jpg'))
         self.splash_for_time.showMessage(
-            "Сохраните своё время с нами!\n\nПодключение к базе данных...\n\r",
+            "Сохраните своё время с нами!\n\nПодключение к базе данных...\n\r"
+            "\n\r\n\r",
             QtCore.Qt.AlignCenter | QtCore.Qt.AlignBottom,
             QtCore.Qt.black
         )
@@ -65,7 +69,8 @@ class MainWindow(QMainWindow):
         generate_image(get_now())
         self.splash_for_time.setPixmap(QtGui.QPixmap(r'images/spimage.jpg'))
         self.splash_for_time.showMessage(
-            "Сохраните своё время с нами!\n\nЗагрузка элементов экрана...\n\r",
+            "Сохраните своё время с нами!\n\nЗагрузка элементов экрана...\n\r"
+            "\n\r\n\r",
             QtCore.Qt.AlignCenter | QtCore.Qt.AlignBottom,
             QtCore.Qt.black
         )
@@ -116,12 +121,26 @@ class MainWindow(QMainWindow):
         my_menu_add = menu_bar.addMenu("&Добавить")
         my_menu_add.addAction(
             "&Продукт", self.add_product,
-            QtCore.Qt.CTRL + QtCore.Qt.Key_N + QtCore.Qt.Key_P)
+            QtCore.Qt.CTRL + QtCore.Qt.Key_P
+        )
+        my_menu_add.addAction(
+            "&Блюдо", self.add_meal,
+            QtCore.Qt.CTRL + QtCore.Qt.Key_M
+        )
         menu_remainders = menu_bar.addMenu("&Остатки")
-        menu_remainders.addAction("&Редактировать", self.edit_remainders,
-                                  QtCore.Qt.CTRL + QtCore.Qt.Key_O + QtCore.Qt.Key_R)
-        menu_remainders.addAction("&Посмотреть", self.show_remainders,
-                                  QtCore.Qt.CTRL + QtCore.Qt.Key_S + QtCore.Qt.Key_O)
+        menu_remainders.addAction(
+            "&Редактировать", self.edit_remainders,
+            QtCore.Qt.CTRL + QtCore.Qt.Key_O + QtCore.Qt.Key_R
+        )
+        menu_remainders.addAction(
+            "&Посмотреть", self.show_remainders,
+            QtCore.Qt.CTRL + QtCore.Qt.Key_S + QtCore.Qt.Key_O
+        )
+
+    def add_meal(self):
+        dialog: QDialog = QDialog(self)
+        dialog.ui = MealInfoUI(dialog, self.db_worker)
+        dialog.show()
 
     def add_product(self):
         dialog: QDialog = QDialog(self)

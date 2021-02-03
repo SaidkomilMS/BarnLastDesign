@@ -27,7 +27,7 @@ class MealInfoUI:
         QtCore.QMetaObject.connectSlotsByName(dialog)
         dialog.setWindowTitle("Добавление блюда")
         self.buttons_layout.addWidget(self.ok_button)
-        self.cancel_button.addWidget(self.cancel_button)
+        self.buttons_layout.addWidget(self.cancel_button)
         self.main_layout.addWidget(self.label)
         self.main_layout.addWidget(self.meal_name)
         self.main_layout.addLayout(self.buttons_layout)
